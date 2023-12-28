@@ -26,8 +26,6 @@ st.write(
     """Test."""
 )
 
-
-
 def read_pdf(file_path):
     # Open the PDF file in binary read mode
     with open(file_path, 'rb') as file:
