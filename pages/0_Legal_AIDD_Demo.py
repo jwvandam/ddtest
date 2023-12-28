@@ -26,7 +26,23 @@ st.write(
     """Test."""
 )
 
-main()
+
+
+def read_pdf(file_path):
+    # Open the PDF file in binary read mode
+    with open(file_path, 'rb') as file:
+        # Create a PDF reader object
+        pdf_reader = PyPDF2.PdfFileReader(file)
+
+        # Initialize an empty string to collect all text
+        text = ''
+
+        # Loop through each page and extract text
+        for page_num in range(pdf_reader.numPages):
+            page = pdf_reader.getPage(page_num)
+            text += page.extractText()
+
+        return text
 
 def categorize_document(doc_content):
     # Use GPT-4 to categorize document
@@ -64,7 +80,7 @@ def main():
 
         for uploaded_file in uploaded_files:
             # Read file content
-            doc_content = StringIO(uploaded_file.getvalue().decode("utf-8")).read()
+            pdf_text = read_pdf(uploaded_file)            
             category = categorize_document(doc_content)
             checks = check_custom_points(doc_content, custom_points)
 
@@ -83,5 +99,5 @@ def main():
         st.download_button('Download Summary Report', df.to_csv().encode('utf-8'), 'summary_report.csv')
 
 
-
+main()
 
