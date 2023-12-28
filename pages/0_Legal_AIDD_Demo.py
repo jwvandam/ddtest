@@ -26,22 +26,6 @@ st.write(
     """Test."""
 )
 
-def read_pdf(file_path):
-    # Open the PDF file in binary read mode
-    with open(file_path, 'rb') as file:
-        # Create a PDF reader object
-        pdf_reader = PyPDF2.PdfFileReader(file)
-
-        # Initialize an empty string to collect all text
-        text = ''
-
-        # Loop through each page and extract text
-        for page_num in range(pdf_reader.numPages):
-            page = pdf_reader.getPage(page_num)
-            text += page.extractText()
-
-        return text
-
 def categorize_document(doc_content):
     # Use GPT-4 to categorize document
     response = openai.Completion.create(
@@ -78,7 +62,7 @@ def main():
 
         for uploaded_file in uploaded_files:
             # Read file content
-            pdf_text = read_pdf(uploaded_file)            
+            doc_content = uploaded_file.read().decode()           
             category = categorize_document(doc_content)
             checks = check_custom_points(doc_content, custom_points)
 
